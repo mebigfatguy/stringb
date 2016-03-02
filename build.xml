@@ -1,0 +1,169 @@
+<!-- stringb Ant build script. Dave Brosius -->
+
+<project name="stringb" default="default">
+
+	<presetdef name="javac">
+		<javac encoding="UTF-8" />
+	</presetdef>
+
+	<presetdef name="javadoc">
+		<javadoc encoding="UTF-8" />
+	</presetdef>
+	
+    <property file="user.properties" />
+    <property file="build.properties" />
+    <property file="version.properties" />
+
+	<property name="src.dir" value="${basedir}/src/main/java" />
+	<property name="test.dir" value="${basedir}/src/test/java" />
+	<property name="target.dir" value="${basedir}/target" />
+	<property name="src.classes.dir" value="${target.dir}/classes/main" />
+	<property name="test.classes.dir" value="${target.dir}/classes/test" />
+	<property name="javadoc.dir" value="${target.dir}/javadoc" />
+	<property name="javac.source" value="1.8" />
+	<property name="javac.target" value="1.8" />
+	<property name="javac.deprecation" value="on" />
+	<property name="javac.debug" value="on" />
+
+	<property name="stringb.version" value="0.1.0-SNAPSHOT" />
+	
+	<property name="sonatype.dir" value="${user.home}/.stringb-${stringb.version}-sonatype" />
+	
+	<target name="clean" description="removes all generated collateral">
+		<delete dir="${target.dir}" />
+	</target>
+	
+	<target name="infra_jars" description="pull jars needed to build stringb to ${user.dir}/.ant/lib">
+		<mkdir dir="${user.home}/.ant/lib" />
+		<get src="http://repo1.maven.org/maven2/com/mebigfatguy/vcsversion/vcsversion/0.4.0/vcsversion-0.4.0.jar" dest="${user.home}/.ant/lib"/>
+	</target>
+    
+    <target name="info">
+        <echo message="stringb - a findbugs plugin"/>
+        <echo message=""/>
+    	<echo message="    This project requires a jar to build stringb: vcsversion" />
+    	<echo message=""/>
+        <echo message="===="/>
+    	<echo message="    This project uses vcsversion to inject the git version information into the manifest file"/>
+    	<echo message="    and can be downloaded and placed in ~/.ant/lib as well"/>
+    	<echo message="    http://search.maven.org/#search%7Cga%7C1%7Cvcsversion"/>
+
+    	<echo message="    This task can be automated by running ant infra_jars"/>
+    </target>
+	
+	<target name="default" depends="info, jar"/>
+
+	<target name="-init">
+		<mkdir dir="${lib.dir}" />
+		<mkdir dir="${src.classes.dir}" />
+		<mkdir dir="${test.classes.dir}" />
+		<mkdir dir="${javadoc.dir}" />
+		<path id="stringb.classpath">
+			<pathelement location="${src.classes.dir}" />
+		</path>
+	</target>
+
+	<target name="compile" depends="-init" description="compiles java files">
+		<javac srcdir="${src.dir}" destdir="${main.classes.dir}" source="${javac.source}" target="${javac.target}" deprecation="${javac.deprecation}" debug="${javac.debug}" includeantruntime="false">
+		</javac>
+	</target>
+
+	<target name="compile_test" depends="-init" description="compiles test">
+		<javac srcdir="${samples.dir}" destdir="${samples.classes.dir}" source="${javac.source}" target="${javac.target}" deprecation="${javac.deprecation}" debug="${javac.debug}" includeantruntime="false">
+        	<compilerarg value="-XDignore.symbol.file"/>
+        	<classpath refid="stringb.classpath" />
+		</javac>
+		<delete file="${samples.dir}/SJVU_Sample.class" />
+		<javac srcdir="${samples.dir}" destdir="${samples.classes.dir}" source="1.4" target="1.4" deprecation="${javac.deprecation}" debug="${javac.debug}" includeantruntime="false">
+			<include name="SJVU_Sample.java" />
+			<classpath refid="stringb.classpath" />
+			<classpath refid="stringb.samples.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" xmlns:vcs="antlib:com.mebigfatguy.vcsversion" description="produces the stringb jar file">
+		<vcs:vcsversion vcs="git" revisionProperty="_rev_" dateProperty="_date_" branchProperty="_branch_" urlProperty="_url_"/>
+		<jar destfile="${target.dir}/stringb-${stringb.version}.jar">
+			<fileset dir="${main.classes.dir}">
+				<include name="**/*.class" />
+			</fileset>
+			<fileset dir="${basedir}">
+				<include name="license.txt" />
+			</fileset>
+			<manifest>
+				<attribute name="stringb-version" value="${stringb.version}" />
+				<attribute name="Main-Class" value="com.mebigfatguy.stringb.StringB" />
+				<attribute name="git-url" value="${_url_}" />
+				<attribute name="git-branch" value="${_branch_}" />
+				<attribute name="git-revision" value="${_rev_}" />
+				<attribute name="git-date" value="${_date_}" />
+				<attribute name="Bundle-ManifestVersion" value="2" />
+				<attribute name="Bundle-Name" value="stringb" />
+				<attribute name="Bundle-SymbolicName" value="stringb; singleton:=true" />
+				<attribute name="Bundle-Version" value="${stringb.version}" />
+				<attribute name="Bundle-ClassPath" value="." />
+				<attribute name="Bundle-Vendor" value="stringb Project" />
+				<attribute name="Bundle-ActivationPolicy" value="lazy" />
+				<attribute name="Export-Package" value="com.mebigfatguy.stringb" />
+                <attribute name="Import-Package" value="" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="srcjar" description="builds the source distribution zip file">
+		<zip destfile="${target.dir}/stringb-src-${stringb.version}.jar">
+			<fileset dir="${basedir}">
+				<include name="**/*.java" />
+				<include name="**/*.license" />
+                <include name="**/*.txt" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="javadoc" depends="-init" description="build the javadoc for the project">
+		<javadoc packagenames="com.mebigfatguy.*" sourcepath="${src.dir}" classpathref="stringb.classpath" destdir="${javadoc.dir}" windowtitle="stringb api">
+			<doctitle><![CDATA[<h1>stringb javadoc</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; 2016 MeBigFatGuy.com. All Rights Reserved.</i>]]></bottom>
+		</javadoc>
+	</target>
+
+	<target name="build" depends="clean, -init, compile, compile_test, jar" description="builds the jar">
+	</target>
+
+	<target name="release" depends="build, srcjar, javadoc" description="prepares everything for a release" />
+
+    <target name="sonatype" depends="release" description="prepare an artifact bundle for sonatype">
+        <mkdir dir="${sonatype.dir}"/>
+        <copy todir="${sonatype.dir}" file="${target.dir}/stringb-${stringb.version}.jar"/>
+        <copy tofile="${sonatype.dir}" file="${target.dir}/stringb-src-${stringb.version}.jar"/>
+        <jar destfile="${sonatype.dir}/stringb-${stringb.version}-javadoc.jar" basedir="${target.dir}" includes="javadoc/**"/>
+        <copy tofile="${sonatype.dir}/stringb-${stringb.version}.pom" file="${basedir}/pom.xml"/>
+        
+        <exec executable="gpg">
+            <arg value="-abi" />
+            <arg value="${sonatype.dir}/stringb-${stringb.version}.jar" />
+        </exec>
+        <exec executable="gpg">
+            <arg value="-abi" />
+            <arg value="${sonatype.dir}/stringb-${stringb.version}.pom" />
+        </exec>
+        <exec executable="gpg">
+            <arg value="-abi" />
+            <arg value="${sonatype.dir}/stringb-${stringb.version}-sources.jar" />
+        </exec>        
+        <exec executable="gpg">
+            <arg value="-abi" />
+            <arg value="${sonatype.dir}/stringb-${stringb.version}-javadoc.jar" />
+        </exec>
+        <jar destfile="${sonatype.dir}/bundle.jar" basedir="${sonatype.dir}" includes="stringb*">
+        </jar>
+        <echo message="" />
+        <echo message="" />
+        <echo message="====================================================================================================================================" />
+        <echo message="sonatype update bundle produced at ${sonatype.dir}/bundle.jar" />
+        <echo message="upload this jar at https://oss.sonatype.org" />
+        <echo message="" />
+        <echo message="see link for details-> https://docs.sonatype.org/display/Repository/Uploading+3rd-party+Artifacts+to+The+Central+Repository" />
+        <echo message="====================================================================================================================================" />
+    </target>
+</project>
