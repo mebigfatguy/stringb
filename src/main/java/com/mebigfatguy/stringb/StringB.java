@@ -283,6 +283,9 @@ public class StringB implements java.io.Serializable, CharSequence {
     public int lastIndexOf(String str, int fromIndex) {
         return super.lastIndexOf(str, fromIndex);
     }
+
+    */
+    
     
     public String toString() {
         StringBuilder sb = new StringBuilder(length);
@@ -309,5 +312,4 @@ public class StringB implements java.io.Serializable, CharSequence {
             parts.add((String) s.readObject());
         }
     }
-    */
 }
