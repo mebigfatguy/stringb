@@ -26,7 +26,7 @@ public class StringB implements java.io.Serializable, CharSequence {
         int offset = 0;
         for (String s : parts) {
             int len = s.length();
-            if ((offset + len) < index) {
+            if ((offset + len) > index) {
                 return s.charAt(index - offset);
             }
             offset += len;
