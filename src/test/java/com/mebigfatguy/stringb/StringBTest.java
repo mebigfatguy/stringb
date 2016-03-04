@@ -41,4 +41,19 @@ public class StringBTest {
             Assert.assertTrue(true);
         }
     }
+    
+    @Test
+    public void testSubString() {
+        StringB sb = new StringB();
+        
+        sb.append("foo").append("bar").append("baz").append(1);
+        
+        String v = "foobarbaz1";
+        
+        for (int i = 0; i < v.length() - 1; i++) {
+            for (int j = i; j < v.length(); j++) {
+                Assert.assertEquals(v.substring(i, j), sb.substring(i, j));
+            }
+        }
+    }
 }

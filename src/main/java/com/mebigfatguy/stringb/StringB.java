@@ -50,15 +50,18 @@ public class StringB implements java.io.Serializable, CharSequence {
         if (start > end)
             throw new StringIndexOutOfBoundsException(end - start);
         
-        StringBuilder sb = new StringBuilder(end - start);
+        StringB sb = null;
         int offset = 0;
         int pi;
         for (pi = 0; pi < parts.size(); pi++) {
             String s = parts.get(pi);
             int len = s.length();
-            if ((offset + len) < start) {
-                if (offset + len < end) {
+            if ((offset + len) > start) {
+                if (offset + len > end) {
                     return s.substring(start - offset, end - offset);
+                }
+                if (sb == null) {
+                    sb = new StringB();
                 }
                 sb.append(s.substring(start - offset));
                 offset += len;
@@ -66,10 +69,11 @@ public class StringB implements java.io.Serializable, CharSequence {
             }
             offset += len;
         }
-        for (;pi < parts.size(); pi++) {
+        
+        for (pi++; pi < parts.size(); pi++) {
             String s = parts.get(pi);
             int len = s.length();
-            if ((offset + len) < end) {
+            if ((offset + len) > end) {
                 sb.append(s.substring(0, end - offset));
                 return sb.toString();
             } else {
