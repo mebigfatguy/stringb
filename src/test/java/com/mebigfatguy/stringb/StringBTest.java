@@ -69,4 +69,19 @@ public class StringBTest {
         
         Assert.assertEquals("fotobarbazbap12", sb.toString());
     }
+    
+    @Test
+    public void testDeleteAt() {
+        
+        StringB sb = new StringB();
+        
+        sb.append("foo").append("bar").append("baz").append(1); 
+        
+        sb.deleteCharAt(9);
+        sb.deleteCharAt(8);
+        sb.deleteCharAt(1);
+        sb.deleteCharAt(0);
+        
+        Assert.assertEquals("obarba", sb.toString());
+    }
 }

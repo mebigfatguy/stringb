@@ -193,6 +193,44 @@ public class StringB implements java.io.Serializable, CharSequence {
         
         return this;
     }
+    
+    public StringB deleteCharAt(int index) {
+        if ((index < 0) || (index >= length)) {
+            throw new StringIndexOutOfBoundsException(index);
+        }
+        
+        int offset = 0;
+        int pi;
+        for (pi = 0; pi < parts.size(); pi++) {
+            
+            String s = parts.get(pi);
+            int len = s.length();
+            if ((offset + len) > index) {
+                if (len == 1) {
+                    parts.remove(pi);
+                    return this;
+                }
+                
+                if (index - offset == 0) {
+                    parts.set(pi, s.substring(1));
+                    return this;
+                } else if  (index - offset == (len-1)) {
+                    parts.set(pi, s.substring(0, len - 1));
+                    return this;
+                } else {
+                    String pre = s.substring(0, index - offset);
+                    String post = s.substring(index - offset+1);
+                    parts.set(pi, pre);
+                    parts.add(pi+1, post);
+                }
+                return this;
+            }
+            offset += len;
+        }
+        
+        return this;
+    }
+
    
     /* 
     public StringB delete(int start, int end) {
@@ -210,14 +248,7 @@ public class StringB implements java.io.Serializable, CharSequence {
         return this;
     }
 
-    public StringB deleteCharAt(int index) {
-        if ((index < 0) || (index >= length)) {
-            throw new StringIndexOutOfBoundsException(start);
-        }
-        super.deleteCharAt(index);
-        return this;
-    }
-
+    
     public StringB replace(int start, int end, String str) {
         super.replace(start, end, str);
         return this;
