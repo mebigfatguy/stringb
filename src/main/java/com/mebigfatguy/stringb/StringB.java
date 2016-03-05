@@ -161,7 +161,40 @@ public class StringB implements java.io.Serializable, CharSequence {
         length += v.length();
         return this;
     }
-/*    
+    
+    public StringB insert(int index, String str) {
+        if (index < 0)
+            throw new StringIndexOutOfBoundsException(index);
+        if (index > length)
+            throw new StringIndexOutOfBoundsException(index);
+        
+        int offset = 0;
+        int pi;
+        for (pi = 0; pi < parts.size(); pi++) {
+            if (index == offset) {
+                parts.add(pi, str);
+                return this;
+            }
+            
+            String s = parts.get(pi);
+            int len = s.length();
+            if ((offset + len) > index) {
+                String pre = s.substring(0, index - offset);
+                String post = s.substring(index - offset);
+                parts.set(pi, pre);
+                parts.add(pi+1, str);
+                parts.add(pi+2, post);
+                return this;
+            }
+            offset += len;
+        }
+        
+        parts.add(str);
+        
+        return this;
+    }
+   
+    /* 
     public StringB delete(int start, int end) {
         if ((start < 0) || (start >= length)) {
             throw new StringIndexOutOfBoundsException(start);
@@ -201,11 +234,6 @@ public class StringB implements java.io.Serializable, CharSequence {
             return this;
     }
 
-    public StringB insert(int offset, String str) {
-        super.insert(offset, str);
-        return this;
-    }
-
     public StringB insert(int offset, char[] str) {
         super.insert(offset, str);
         return this;
@@ -222,37 +250,40 @@ public class StringB implements java.io.Serializable, CharSequence {
         super.insert(dstOffset, s, start, end);
         return this;
     }
+    */
 
     public StringB insert(int offset, boolean b) {
-        super.insert(offset, b);
+        insert(offset, String.valueOf(b));
         return this;
     }
 
     public StringB insert(int offset, char c) {
-        super.insert(offset, c);
+        insert(offset, String.valueOf(c));
         return this;
     }
 
     public StringB insert(int offset, int i) {
-        super.insert(offset, i);
+        insert(offset, String.valueOf(i));
         return this;
     }
 
     public StringB insert(int offset, long l) {
-        super.insert(offset, l);
+        insert(offset, String.valueOf(l));
         return this;
     }
 
     public StringB insert(int offset, float f) {
-        super.insert(offset, f);
+        insert(offset, String.valueOf(f));
         return this;
     }
 
     public StringB insert(int offset, double d) {
-        super.insert(offset, d);
+        insert(offset, String.valueOf(d));
+
         return this;
     }
 
+    /*
     public int indexOf(String str) {
         int offset = 0;
         

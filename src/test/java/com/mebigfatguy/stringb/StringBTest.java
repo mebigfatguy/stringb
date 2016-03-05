@@ -56,4 +56,17 @@ public class StringBTest {
             }
         }
     }
+    
+    @Test
+    public void testInsert() {
+        StringB sb = new StringB();
+        
+        sb.append("foo").append("bar").append("baz").append(1);
+        
+        sb.insert(10, 2);
+        sb.insert(9, "bap");
+        sb.insert(2, "t");
+        
+        Assert.assertEquals("fotobarbazbap12", sb.toString());
+    }
 }
