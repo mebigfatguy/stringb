@@ -354,43 +354,21 @@ public class StringB implements java.io.Serializable, CharSequence {
         return this;
     }
 
-    /*
     public int indexOf(String str) {
-        int offset = 0;
-        
-        for (String s : parts) {
-            int index = s.indexOf(str);
-            if (index >= 0) {
-                return offset + index;
-            }
-            offset += s.length();
-        }
-        return -1;
+       return indexOf(str, 0);
     }
 
     public int indexOf(String str, int fromIndex) {
-        return super.indexOf(str, fromIndex);
-    }
-
-    public int lastIndexOf(String str) {
-        int offset = length;
-        
-        for (int i = parts.size() - 1; i >= 0; i--) {
-            String s = parts.get(i);
-            int index = s.lastIndexOf(str);
-            if (index >= 0) {
-                return offset - (s.length() - index);
-            }
-            offset -= s.length();
-        }
         return -1;
     }
 
-    public int lastIndexOf(String str, int fromIndex) {
-        return super.lastIndexOf(str, fromIndex);
+    public int lastIndexOf(String str) {
+        return lastIndexOf(str, length);
     }
 
-    */
+    public int lastIndexOf(String str, int fromIndex) {
+        return -1;
+    }
     
     @Override
     public String toString() {
