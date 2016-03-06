@@ -232,23 +232,59 @@ public class StringB implements java.io.Serializable, CharSequence {
     }
 
    
-    /* 
+
     public StringB delete(int start, int end) {
         if ((start < 0) || (start >= length)) {
             throw new StringIndexOutOfBoundsException(start);
         }
-        if ((end < 0) || (end >= length)) {
+        if ((end < 0) || (end > length)) {
             throw new StringIndexOutOfBoundsException(end);
         }
         if (end < start) {
             throw new StringIndexOutOfBoundsException(end);
         }
         
-        super.delete(start, end);
+        int offset = 0;
+        int pi;
+        for (pi = 0; pi < parts.size(); pi++) {
+            
+            String s = parts.get(pi);
+            int len = s.length();
+            if ((offset + len) > start) {
+                if ((offset + len) >= end) {
+                    if ((offset == start) && ((offset + len) == end)) {
+                        parts.remove(pi);
+                        return this;
+                    }
+                    s = s.substring(start - offset, end - offset);
+                    parts.set(pi, s);
+                } else {
+                    s = s.substring(0, start);
+                    parts.set(pi, s);
+                    offset += len;
+                    break;
+                }
+            }
+            offset += len;
+        }
+        
+        for (pi++; pi < parts.size(); pi++) {
+            String s = parts.get(pi);
+            int len = s.length();
+            if ((offset + len) >= end) {
+                s = s.substring(end - offset);
+                parts.set(pi, s);
+                return this;
+            } else {
+                parts.remove(pi--);
+            }
+            offset += len;
+        }
+        
         return this;
     }
 
-    
+    /* 
     public StringB replace(int start, int end, String str) {
         super.replace(start, end, str);
         return this;

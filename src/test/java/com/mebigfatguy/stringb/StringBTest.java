@@ -84,4 +84,16 @@ public class StringBTest {
         
         Assert.assertEquals("obarba", sb.toString());
     }
+    
+    @Test
+    public void testDelete() {
+        StringB sb = new StringB();
+        
+        sb.append("foo").append("bar").append("baz").append(1); 
+        
+        sb.delete(9, 10);
+        sb.delete(2, 8);
+        
+        Assert.assertEquals("foz", sb.toString());
+    }
 }
