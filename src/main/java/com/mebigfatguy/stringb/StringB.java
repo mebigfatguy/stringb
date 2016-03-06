@@ -34,6 +34,7 @@ public class StringB implements java.io.Serializable, CharSequence {
         throw new StringIndexOutOfBoundsException(index);
     }
     
+    @Override
     public CharSequence subSequence(int start, int end) {
         return substring(start, end);
     }
@@ -391,7 +392,7 @@ public class StringB implements java.io.Serializable, CharSequence {
 
     */
     
-    
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(length);
         for (String str : parts) {
