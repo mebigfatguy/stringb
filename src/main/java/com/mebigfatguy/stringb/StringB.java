@@ -256,14 +256,17 @@ public class StringB implements java.io.Serializable, CharSequence {
                         parts.remove(pi);
                         return this;
                     }
-                    s = s.substring(start - offset, end - offset);
+                    s = s.substring(0, start - offset);
                     parts.set(pi, s);
+                    if ((offset + len) == end) {
+                        return this;
+                    }
                 } else {
                     s = s.substring(0, start);
                     parts.set(pi, s);
                     offset += len;
-                    break;
                 }
+                break;
             }
             offset += len;
         }
@@ -284,13 +287,12 @@ public class StringB implements java.io.Serializable, CharSequence {
         return this;
     }
 
-    /* 
+
     public StringB replace(int start, int end, String str) {
-        super.replace(start, end, str);
+        delete(start, end);
+        insert(start, str);
         return this;
     }
-    
-    */
 
     public StringB insert(int index, char[] str, int offset, int len)
     {

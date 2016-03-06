@@ -96,4 +96,17 @@ public class StringBTest {
         
         Assert.assertEquals("foz", sb.toString());
     }
+    
+    @Test
+    public void testReplace() {
+        StringB sb = new StringB();
+        
+        sb.append("foo").append("bar").append("baz").append(1); 
+        
+        sb.replace(9, 10, "22");
+        sb.replace(6,  9, "bozo");
+        sb.replace(1, 3, "epo");
+        
+        Assert.assertEquals("fepobarbozo22", sb.toString());
+    }
 }
