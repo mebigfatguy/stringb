@@ -5,6 +5,8 @@ import java.util.List;
 
 public class StringB implements java.io.Serializable, CharSequence {
 
+    private static final long serialVersionUID = -2518739511725819653L;
+
     private List<String> parts;
     private int length;
     
