@@ -398,4 +398,21 @@ public class StringB implements java.io.Serializable, CharSequence {
             parts.add((String) s.readObject());
         }
     }
+    
+    private int findPartIndex(int index) {
+        if ((index < 0) || (index >= length)) {
+            throw new StringIndexOutOfBoundsException(index);
+        }
+        
+        long offset = 0;
+        for (int pi = 0; pi < parts.size(); pi++) {
+            String p = parts.get(pi);
+            int len = p.length();
+            if ((offset + len) > index) {
+                return pi;
+            }
+        }
+        
+        return parts.size() - 1;
+    }
 }
