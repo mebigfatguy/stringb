@@ -399,7 +399,7 @@ public class StringB implements java.io.Serializable, CharSequence {
         }
     }
     
-    private int findPartIndex(int index) {
+    private PartIndex findPartIndex(int index) {
         if ((index < 0) || (index >= length)) {
             throw new StringIndexOutOfBoundsException(index);
         }
@@ -409,10 +409,20 @@ public class StringB implements java.io.Serializable, CharSequence {
             String p = parts.get(pi);
             int len = p.length();
             if ((offset + len) > index) {
-                return pi;
+                return new PartIndex(pi, offset);
             }
         }
         
-        return parts.size() - 1;
+        return new PartIndex(parts.size() - 1, offset);
+    }
+    
+    class PartIndex {
+        int partIndex;
+        long startOffset;
+        
+        public PartIndex(int index, long offset) {
+            partIndex = index;
+            startOffset = offset;
+        }
     }
 }
