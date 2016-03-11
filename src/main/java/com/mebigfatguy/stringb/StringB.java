@@ -376,6 +376,15 @@ public class StringB implements java.io.Serializable, CharSequence {
     
     @Override
     public String toString() {
+        
+        if (parts.size() < 2) {
+            if (parts.isEmpty()) {
+                return "";
+            }
+            
+            return parts.get(0);
+        }
+        
         StringBuilder sb = new StringBuilder(length);
         for (String str : parts) {
             sb.append(str);
