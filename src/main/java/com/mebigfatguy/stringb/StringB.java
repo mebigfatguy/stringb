@@ -361,7 +361,8 @@ public class StringB implements java.io.Serializable, CharSequence {
     }
 
     public int indexOf(String str, int fromIndex) {
-        return -1;
+        String s = toString();
+        return s.indexOf(str, fromIndex);
     }
 
     public int lastIndexOf(String str) {
@@ -369,7 +370,8 @@ public class StringB implements java.io.Serializable, CharSequence {
     }
 
     public int lastIndexOf(String str, int fromIndex) {
-        return -1;
+        String s = toString();
+        return s.lastIndexOf(str, fromIndex);
     }
     
     @Override
@@ -378,7 +380,11 @@ public class StringB implements java.io.Serializable, CharSequence {
         for (String str : parts) {
             sb.append(str);
         }
-        return sb.toString();
+        
+        String combined = sb.toString();
+        parts.clear();
+        parts.add(combined);
+        return combined;
     }
     
     private void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
@@ -396,33 +402,6 @@ public class StringB implements java.io.Serializable, CharSequence {
         int numParts = s.readInt();
         for (int i = 0; i < numParts; i++) {
             parts.add((String) s.readObject());
-        }
-    }
-    
-    private PartIndex findPartIndex(int index) {
-        if ((index < 0) || (index >= length)) {
-            throw new StringIndexOutOfBoundsException(index);
-        }
-        
-        long offset = 0;
-        for (int pi = 0; pi < parts.size(); pi++) {
-            String p = parts.get(pi);
-            int len = p.length();
-            if ((offset + len) > index) {
-                return new PartIndex(pi, offset);
-            }
-        }
-        
-        return new PartIndex(parts.size() - 1, offset);
-    }
-    
-    class PartIndex {
-        int partIndex;
-        long startOffset;
-        
-        public PartIndex(int index, long offset) {
-            partIndex = index;
-            startOffset = offset;
         }
     }
 }
