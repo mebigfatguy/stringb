@@ -109,4 +109,24 @@ public class StringBTest {
         
         Assert.assertEquals("fepobarbozo22", sb.toString());
     }
+    
+    @Test
+    public void testIndexOf() {
+        StringB sb = new StringB();
+        
+        sb.append("foo").append("bar").append("baz").append(1); 
+
+        
+        Assert.assertEquals(2, sb.indexOf("oba"));
+    }
+    
+    @Test
+    public void testLastIndexOf() {
+        StringB sb = new StringB();
+        
+        sb.append("foo").append("bar").append("baz").append(1); 
+
+        
+        Assert.assertEquals(2, sb.lastIndexOf("oba"));
+    }
 }
