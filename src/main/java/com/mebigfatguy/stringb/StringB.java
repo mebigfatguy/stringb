@@ -97,8 +97,11 @@ public class StringB implements java.io.Serializable, CharSequence {
     
     public StringB append(String str) {
         String v = (str == null) ? "null" : str;
-        parts.add(v);
-        length += v.length();
+        
+        if (str.length() > 0) {
+            parts.add(v);
+            length += v.length();
+        }
         return this;
     }
     
@@ -171,28 +174,30 @@ public class StringB implements java.io.Serializable, CharSequence {
         if (index > length)
             throw new StringIndexOutOfBoundsException(index);
         
-        int offset = 0;
-        int pi;
-        for (pi = 0; pi < parts.size(); pi++) {
-            if (index == offset) {
-                parts.add(pi, str);
-                return this;
+        if (str.length() > 0) {
+            int offset = 0;
+            int pi;
+            for (pi = 0; pi < parts.size(); pi++) {
+                if (index == offset) {
+                    parts.add(pi, str);
+                    return this;
+                }
+                
+                String s = parts.get(pi);
+                int len = s.length();
+                if ((offset + len) > index) {
+                    String pre = s.substring(0, index - offset);
+                    String post = s.substring(index - offset);
+                    parts.set(pi, pre);
+                    parts.add(pi+1, str);
+                    parts.add(pi+2, post);
+                    return this;
+                }
+                offset += len;
             }
             
-            String s = parts.get(pi);
-            int len = s.length();
-            if ((offset + len) > index) {
-                String pre = s.substring(0, index - offset);
-                String post = s.substring(index - offset);
-                parts.set(pi, pre);
-                parts.add(pi+1, str);
-                parts.add(pi+2, post);
-                return this;
-            }
-            offset += len;
+            parts.add(str);
         }
-        
-        parts.add(str);
         
         return this;
     }
@@ -299,12 +304,18 @@ public class StringB implements java.io.Serializable, CharSequence {
 
     public StringB insert(int index, char[] str, int offset, int len)
     {
-        insert(index, new String(str, offset, len));
+        if (len < 0) {
+            throw new StringIndexOutOfBoundsException(len);
+        }
+        
+        if (len > 0) {
+            insert(index, new String(str, offset, len));
+        }
         return this;
     }
 
     public StringB insert(int index, Object obj) {
-            insert(index, obj);
+            insert(index, String.valueOf(obj));
             return this;
     }
 
