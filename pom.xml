@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- pom.xml developed by Grzegorz Slowikowski -->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mebigfatguy.stringb</groupId>
+    <artifactId>stringb</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+
+    <prerequisites>
+        <maven>2.2.1</maven>
+    </prerequisites>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>5</version>
+    </parent>
+
+    <name>StringB</name>
+    <description>A StringBuilder replacement.</description>
+    <url>http://stringb.mebigfatguy.com</url>
+    <inceptionYear>2016</inceptionYear>
+
+    <developers>
+        <developer>
+            <id>dbrosius</id>
+            <name>Dave Brosius</name>
+            <email>dbrosius@mebigfatguy.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache 2 License</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/mebigfatguy/stringb/</connection>
+        <developerConnection>scm:git:https://github.com/mebigfatguy/stringb/</developerConnection>
+        <url>https://github.com/mebigfatguy/stringb/</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/mebigfatguy/stringb/issues/</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.build.timestamp.format>E MMM d hh:mm:ss yyyy XX</maven.build.timestamp.format>
+    </properties>
+
+    <dependencies>
+        <dependency><scope>test</scope><groupId>junit</groupId><artifactId>junit</artifactId><version>4.12</version></dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${basedir}/src/main</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/main/test</testSourceDirectory>
+        <outputDirectory>${basedir}/target/classes</outputDirectory>
+        <resources>
+            <resource>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>license.txt</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin><artifactId>maven-clean-plugin</artifactId><version>2.6.1</version></plugin>
+                <plugin><groupId>org.codehaus.mojo</groupId><artifactId>buildnumber-maven-plugin</artifactId><version>1.3</version></plugin>
+                <plugin><groupId>org.codehaus.mojo</groupId><artifactId>findbugs-maven-plugin</artifactId><version>2.5.5</version></plugin>
+                <plugin><artifactId>maven-compiler-plugin</artifactId><version>3.1</version></plugin>
+                <plugin><artifactId>maven-deploy-plugin</artifactId><version>2.8.2</version></plugin>
+                <plugin><artifactId>maven-install-plugin</artifactId><version>2.5.2</version></plugin>
+                <plugin><artifactId>maven-jar-plugin</artifactId><version>2.6</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <fb-contrib-version>${project.version}</fb-contrib-version>
+                                <git-revision>${scmBranch} ${buildNumber} ${maven.build.timestamp}</git-revision>
+                                <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+                                <Bundle-Name>stringb</Bundle-Name>
+                                <Bundle-SymbolicName>stringb; singleton:=true</Bundle-SymbolicName>
+                                <Bundle-Version>${project.version}</Bundle-Version>
+                                <Bundle-ClassPath>.</Bundle-ClassPath>
+                                <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+                                <Export-Package>com.mebigfatguy.stringb</Export-Package>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin><artifactId>maven-project-info-reports-plugin</artifactId><version>2.7</version></plugin>
+                <plugin><artifactId>maven-resources-plugin</artifactId><version>2.7</version></plugin>
+                <plugin><artifactId>maven-site-plugin</artifactId><version>3.4</version></plugin>
+                <plugin><artifactId>maven-source-plugin</artifactId><version>2.2.1</version></plugin>
+                <plugin><artifactId>maven-surefire-plugin</artifactId><version>2.18.1</version></plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId><artifactId>buildnumber-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgument>-Xlint</compilerArgument>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
