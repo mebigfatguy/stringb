@@ -50,7 +50,7 @@ public class TimeTest {
         StringBuilder sb = new StringBuilder();
         
         for (int i = 0; i < 1000; i++) {
-            sb.append(r.nextInt()).append(",");
+            sb.append("Val: ").append(r.nextInt()).append(",");
         }
         
         return sb.toString();
@@ -60,7 +60,7 @@ public class TimeTest {
         StringB sb = new StringB();
         
         for (int i = 0; i < 1000; i++) {
-            sb.append(r.nextInt()).append(",");
+            sb.append("Val: ").append(r.nextInt()).append(",");
         }
         
         return sb.toString();
