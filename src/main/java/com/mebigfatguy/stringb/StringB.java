@@ -106,8 +106,10 @@ public class StringB implements java.io.Serializable, CharSequence {
     
     public StringB append(Object obj) {
         String v = String.valueOf(obj);
-        parts.add(v);
-        length += v.length();
+        if (v.length() > 0) {
+            parts.add(v);
+            length += v.length();
+        }
         return this;
     }
     
@@ -123,22 +125,28 @@ public class StringB implements java.io.Serializable, CharSequence {
     
     public StringB append(CharSequence s) {
         String v = s == null ? "null" : s.toString();
-        parts.add(v);
-        length += v.length();
+        if (v.length() > 0) {
+            parts.add(v);
+            length += v.length();
+        }
         return this;
     }
     
     public StringB append(char[] str) {
-        String v = String.valueOf(str);
-        parts.add(v);
-        length += v.length();
+        if (str.length > 0) {
+            String v = String.valueOf(str);
+            parts.add(v);
+            length += v.length();
+        }
         return this;
     }
     
     public StringB append(char[] str, int offset, int len) {
-        String v = new String(str, offset, len);
-        parts.add(v);
-        length += v.length();
+        if (len > 0) {
+            String v = new String(str, offset, len);
+            parts.add(v);
+            length += v.length();
+        }
         return this;
     }
     
@@ -268,6 +276,10 @@ public class StringB implements java.io.Serializable, CharSequence {
             throw new StringIndexOutOfBoundsException(end);
         }
         
+        if (start == end) {
+            return this;
+        }
+
         int offset = 0;
         int pi;
         for (pi = 0; pi < parts.size(); pi++) {
@@ -313,7 +325,9 @@ public class StringB implements java.io.Serializable, CharSequence {
 
 
     public StringB replace(int start, int end, String str) {
-        delete(start, end);
+        if (start != end) {
+            delete(start, end);
+        }
         insert(start, str);
         return this;
     }
