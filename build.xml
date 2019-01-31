@@ -154,7 +154,7 @@
 	<target name="javadoc" depends="-init" description="build the javadoc for the project">
 		<javadoc packagenames="com.mebigfatguy.*" sourcepath="${src.dir}" classpathref="stringb.classpath" destdir="${javadoc.dir}" windowtitle="stringb api">
 			<doctitle><![CDATA[<h1>stringb javadoc</h1>]]></doctitle>
-			<bottom><![CDATA[<i>Copyright &#169; 2016 MeBigFatGuy.com. All Rights Reserved.</i>]]></bottom>
+			<bottom><![CDATA[<i>Copyright &#169; 2016-2019 MeBigFatGuy.com. All Rights Reserved.</i>]]></bottom>
 		</javadoc>
 	</target>
 
